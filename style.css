@@ -67,10 +67,11 @@ body {
 }
 
 .logo-image {
-    height: 50px; /* Reduced to make the bar more proportional */
+    height: 65px; /* Increased to make it more prominent */
     width: auto;
     object-fit: contain;
     transition: var(--transition);
+    filter: drop-shadow(0 0 8px rgba(209, 166, 129, 0.3)); /* Added a soft golden glow to highlight against the dark bg */
 }
 
 .logo-image:hover {
@@ -511,8 +512,9 @@ body {
 }
 
 .footer-logo-img {
-    height: 45px; /* Slightly smaller logo for footer */
-    margin-bottom: 25px; /* Reduced margin from 40px */
+    height: 60px; /* Enhanced visibility in footer */
+    margin-bottom: 25px;
+    filter: drop-shadow(0 0 10px rgba(209, 166, 129, 0.4));
 }
 
 .footer-links {
