@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Studio Beauty Elite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: '#4d081d',
+                        sand: '#d1a681',
+                        'sand-hover': '#b88f6a',
+                    },
+                    fontFamily: {
+                        heading: ['Playfair Display', 'serif'],
+                        body: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #3d0617; color: #FFFFFF; }
+        .sidebar-item-active { background-color: rgba(209, 166, 129, 0.1); color: #d1a681; border-right: 4px solid #d1a681; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(209, 166, 129, 0.1); }
+        .glass-header { background: rgba(77, 8, 29, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(209, 166, 129, 0.1); }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass-header border-r border-sand/10 flex-shrink-0 hidden md:flex flex-col">
+        <div class="p-6">
+            <a href="../index.html" class="block">
+                <img src="../logo-studio-inova.jpg" alt="Studio Inova Logo" class="h-12 w-auto hover:opacity-80 transition-opacity rounded-lg shadow-sm border border-sand/10">
+            </a>
+        </div>
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="javascript:void(0)" onclick="changeSection('dashboard')" class="sidebar-item-active flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Dashboard
+            </a>
+            <a href="javascript:void(0)" onclick="changeSection('agendamentos')" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-sand hover:bg-sand/5 rounded-lg transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Agendamentos
+            </a>
+            <a href="javascript:void(0)" onclick="changeSection('serviços')" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-sand hover:bg-sand/5 rounded-lg transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 01-2-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                Serviços
+            </a>
+            <a href="javascript:void(0)" onclick="changeSection('clientes')" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-sand hover:bg-sand/5 rounded-lg transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                Clientes
+            </a>
+        </nav>
+        <div class="p-4 border-t border-sand/10">
+            <div class="flex items-center gap-3 px-4">
+                <div class="w-8 h-8 rounded-full bg-sand text-burgundy flex items-center justify-center font-bold">C</div>
+                <div class="text-sm">
+                    <p class="font-semibold text-white">Cleiton</p>
+                    <p class="text-sand/50 text-xs">cleitonalexandrino@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-y-auto bg-transparent">
+        <!-- Top Bar -->
+        <header class="h-16 glass-header flex items-center justify-between px-8 sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl font-bold text-white">Visão Geral</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="p-2 text-white/40 hover:text-sand transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </button>
+                <div class="h-8 w-px bg-sand/10"></div>
+                <button class="bg-sand text-burgundy px-4 py-2 rounded-lg text-sm font-bold hover:bg-sand-hover transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    Novo Agendamento
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Body -->
+        <div class="p-8">
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="glass-panel p-6 rounded-2xl shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-sand/10 text-sand rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <span class="text-green-400 text-xs font-bold">+12%</span>
+                    </div>
+                    <p class="text-white/40 text-sm font-medium">Clientes Totais</p>
+                    <h3 class="text-2xl font-bold text-white">1,280</h3>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-sand/10 text-sand rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <span class="text-green-400 text-xs font-bold">+5%</span>
+                    </div>
+                    <p class="text-white/40 text-sm font-medium">Agendamentos hoje</p>
+                    <h3 id="total-agendamentos-hoje" class="text-2xl font-bold text-white">0</h3>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-sand/10 text-sand rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        </div>
+                        <span class="text-white/20 text-xs font-bold">Estável</span>
+                    </div>
+                    <p class="text-white/40 text-sm font-medium">Concluídos</p>
+                    <h3 class="text-2xl font-bold text-white">482</h3>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-sand/10 text-sand rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M12 16V5"></path></svg>
+                        </div>
+                        <span class="text-green-400 text-xs font-bold">+18%</span>
+                    </div>
+                    <p class="text-white/40 text-sm font-medium">Receita Mensal</p>
+                    <h3 class="text-2xl font-bold text-white">R$ 12.450</h3>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="glass-panel rounded-2xl shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-sand/10 flex items-center justify-between">
+                    <h3 class="font-bold text-white text-lg">Agendamentos Recentes</h3>
+                    <button class="text-sand text-sm font-medium hover:underline">Ver todos</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-sand/5 text-sand/40 text-xs font-bold uppercase">
+                            <tr>
+                                <th class="px-6 py-4">Cliente</th>
+                                <th class="px-6 py-4">Serviço</th>
+                                <th class="px-6 py-4">Data/Hora</th>
+                                <th class="px-6 py-4">Valor</th>
+                                <th class="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="agendamentos-table-body" class="divide-y divide-sand/5">
+                            <!-- Os dados serão carregados via Supabase -->
+                            <tr><td colspan="5" class="px-6 py-8 text-center text-white/20 italic text-sm">Carregando agendamentos...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Supabase Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://zdfbxruhkugiwlmzlclw.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_GOwLD5Q0tpUZvT_prV6xFg_q1zLQFg-';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentSection = 'dashboard';
+
+        function updateSidebarUI() {
+            document.querySelectorAll('nav a').forEach(a => {
+                const text = a.textContent.trim().toLowerCase();
+                if (text === currentSection || (currentSection === 'dashboard' && text === 'dashboard')) {
+                    a.classList.add('sidebar-item-active');
+                    a.classList.remove('text-white/60');
+                } else {
+                    a.classList.remove('sidebar-item-active');
+                    a.classList.add('text-white/60');
+                }
+            });
+        }
+
+        async function changeSection(section) {
+            currentSection = section;
+            updateSidebarUI();
+            
+            const title = document.querySelector('header h2');
+            const tableTitle = document.querySelector('.glass-panel h3');
+            const tableHead = document.querySelector('thead');
+            const tbody = document.getElementById('agendamentos-table-body');
+
+            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-white/20 italic text-sm">Carregando...</td></tr>';
+
+            if (section === 'dashboard' || section === 'agendamentos') {
+                title.textContent = section === 'dashboard' ? 'Visão Geral' : 'Agendamentos';
+                tableTitle.textContent = 'Agendamentos Recentes';
+                tableHead.innerHTML = `
+                    <tr>
+                        <th class="px-6 py-4">Cliente</th>
+                        <th class="px-6 py-4">Serviço</th>
+                        <th class="px-6 py-4">Data/Hora</th>
+                        <th class="px-6 py-4 text-right">Valor</th>
+                        <th class="px-6 py-4 text-right">Status</th>
+                    </tr>
+                `;
+                await fetchDashboardData();
+            } else if (section === 'serviços') {
+                title.textContent = 'Gerenciar Serviços';
+                tableTitle.textContent = 'Lista de Serviços';
+                tableHead.innerHTML = `
+                    <tr>
+                        <th class="px-6 py-4">Nome</th>
+                        <th class="px-6 py-4">Duração</th>
+                        <th class="px-6 py-4 text-right">Preço</th>
+                        <th class="px-6 py-4 text-right">Ações</th>
+                    </tr>
+                `;
+                
+                const { data: servicos } = await supabaseClient.from('servicos').select('*').order('nome');
+                tbody.innerHTML = '';
+                servicos?.forEach(s => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-sand/5 transition-colors">
+                            <td class="px-6 py-4 font-medium text-white/80">${s.nome}</td>
+                            <td class="px-6 py-4 text-white/50">${s.duracao} min</td>
+                            <td class="px-6 py-4 font-semibold text-sand text-right">R$ ${s.preco.toFixed(2)}</td>
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-sand/40 hover:text-sand text-xs font-bold uppercase transition-colors">Editar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } else if (section === 'clientes') {
+                title.textContent = 'Meus Clientes';
+                tableTitle.textContent = 'Base de Clientes';
+                tableHead.innerHTML = `
+                    <tr>
+                        <th class="px-6 py-4">Nome</th>
+                        <th class="px-6 py-4">Email</th>
+                        <th class="px-6 py-4">Telefone</th>
+                        <th class="px-6 py-4 text-right">Ações</th>
+                    </tr>
+                `;
+                
+                const { data: clientes } = await supabaseClient.from('clientes').select('*').order('nome');
+                tbody.innerHTML = '';
+                clientes?.forEach(c => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-sand/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-sand/10 border border-sand/20 flex items-center justify-center text-[10px] font-bold text-sand">
+                                        ${c.nome?.charAt(0) || '?'}
+                                    </div>
+                                    <span class="font-medium text-white/80">${c.nome}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-white/50 text-sm">${c.email || 'N/A'}</td>
+                            <td class="px-6 py-4 text-white/50 text-sm">${c.telefone || 'N/A'}</td>
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-sand/40 hover:text-sand text-xs font-bold uppercase transition-colors">Perfil</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        async function fetchDashboardData() {
+            try {
+                // 1. Buscar Agendamentos Recentes (Últimos 7 dias e próximos)
+                const start = new Date();
+                start.setDate(start.getDate() - 7);
+                start.setHours(0,0,0,0);
+
+                const { data: agendamentos, error } = await supabaseClient
+                    .from('agendamentos')
+                    .select('*, clientes(nome), servicos(nome, preco)')
+                    .gte('inicio_em', start.toISOString())
+                    .order('inicio_em', { ascending: false });
+
+                if (error) throw error;
+
+                // 2. Atualizar Métricas (Sempre do dia atual)
+                const hojeISO = new Date().toLocaleDateString('en-CA');
+                const countHoje = agendamentos.filter(a => a.inicio_em.startsWith(hojeISO)).length;
+                document.getElementById('total-agendamentos-hoje').textContent = countHoje;
+                
+                // 3. Renderizar Tabela (Somente se estiver na seção dashboard ou agendamentos)
+                if (currentSection !== 'dashboard' && currentSection !== 'agendamentos') return;
+
+                const tbody = document.getElementById('agendamentos-table-body');
+                tbody.innerHTML = '';
+
+                if (agendamentos.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-white/20 italic text-sm">Nenhum agendamento recente encontrado</td></tr>`;
+                    return;
+                }
+
+                agendamentos.forEach(agendamento => {
+                    const dateObj = new Date(agendamento.inicio_em);
+                    const dataHora = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    const isHoje = dateObj.toLocaleDateString('en-CA') === hojeISO;
+                    const dataDisplay = isHoje ? `Hoje, ${dataHora}` : `${dateObj.toLocaleDateString('pt-BR')}, ${dataHora}`;
+                    
+                    const statusClass = {
+                        'agendado': 'bg-white/5 text-sand border-sand/20',
+                        'concluido': 'bg-green-500/10 text-green-400 border-green-400/20',
+                        'cancelado': 'bg-red-500/10 text-red-400 border-red-400/20'
+                    }[agendamento.status] || 'bg-white/5 text-white/50 border-white/10';
+
+                    const row = `
+                        <tr class="hover:bg-sand/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-sand/10 border border-sand/20 flex items-center justify-center text-[10px] font-bold text-sand">
+                                        ${agendamento.clientes?.nome?.charAt(0) || '?'}
+                                    </div>
+                                    <span class="font-medium text-white/80">${agendamento.clientes?.nome || 'Cliente não identificado'}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-white/50">${agendamento.servicos?.nome || 'Serviço não identificado'}</td>
+                            <td class="px-6 py-4 text-white/50 italic">${dataDisplay}</td>
+                            <td class="px-6 py-4 font-semibold text-sand text-right">R$ ${agendamento.servicos?.preco?.toFixed(2) || '0,00'}</td>
+                            <td class="px-6 py-4 text-right">
+                                <span class="px-3 py-1 ${statusClass} text-[10px] font-bold rounded-full border uppercase tracking-tighter">
+                                    ${agendamento.status}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (err) {
+                console.error('Erro ao carregar dashboard:', err);
+            }
+        }
+
+        // Carregar ao iniciar
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+
+        // Atualização em Tempo Real (Realtime)
+        supabaseClient.channel('custom-all-channel')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'agendamentos' }, () => {
+                if (currentSection === 'dashboard' || currentSection === 'agendamentos') {
+                    fetchDashboardData();
+                }
+            })
+            .subscribe();
+
+    </script>
+</body>
+</html>

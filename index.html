@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformação Capilar | Studio de Beleza</title>
+    <meta name="description" content="Especialistas em coloração profissional e tratamentos capilares que revelam sua melhor versão.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="bg-overlay"></div>
+
+    <header class="navbar">
+        <div class="container nav-content">
+            <div class="logo">
+                <img src="logo-studio-inova.jpg" alt="Studio Inova Logo" class="logo-image">
+            </div>
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <div class="dropdown">
+                    <a href="#services" class="dropdown-trigger">Serviços <span class="arrow">▾</span></a>
+                    <div class="dropdown-menu">
+                        <a href="#loiros">Loiros Saudáveis</a>
+                        <a href="#liso">Liso Perfeito</a>
+                        <a href="#cortes">Cortes (Fem/Masc)</a>
+                        <a href="#progressivas">Progressivas</a>
+                        <a href="#maquiagem">Maquiagem & Penteado</a>
+                        <a href="#cilios">Cílios</a>
+                        <a href="#laser">Depilação a Laser</a>
+                        <a href="#terapia">Terapia Capilar</a>
+                        <a href="#cronograma">Cronograma Capilar</a>
+                    </div>
+                </div>
+                <a href="#before-after">Antes & Depois</a>
+                <div class="dropdown">
+                    <a href="#testimonials" class="dropdown-trigger">Depoimentos <span class="arrow">▾</span></a>
+                    <div class="dropdown-menu">
+                        <a href="#loiro-divino">Rose Leite (★★★★★)</a>
+                        <a href="#excelencia">Fernanda Lima (★★★★★)</a>
+                        <a href="#super-recomendo">Marilene Santos (★★★★★)</a>
+                        <a href="#atendimento-top">Guilherme Cardoso (★★★★★)</a>
+                        <a href="#corte-perfeito">Mayara Brito (★★★★★)</a>
+                        <a href="#facil-acesso">Stefanie Fonseca (★★★★★)</a>
+                        <a href="#equipe-pro">Juliana Higino (★★★★★)</a>
+                        <a href="#morena-iluminada">Natalia Nicoletti (★★★★★)</a>
+                    </div>
+                </div>
+                <a href="#contact">Contato</a>
+            </nav>
+            <div class="mobile-menu-btn" id="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <h1 class="headline">
+                        Transforme Seu Cabelo. <br>
+                        <span class="accent">Revele Sua Melhor Versão.</span>
+                    </h1>
+                    <p class="subheadline">
+                        Coloração profissional e tratamentos que realçam sua beleza natural com brilho, saúde e movimento.
+                    </p>
+                    
+                    <ul class="highlights">
+                        <li>
+                            <span class="check">✓</span>
+                            Especialistas em transformação capilar
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            Produtos profissionais de alta qualidade
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            Resultado natural e duradouro
+                        </li>
+                    </ul>
+
+                    <div class="cta-group">
+                        <a href="studio-beauty-elite/booking.html" class="btn btn-primary">Agendar Transformação</a>
+                        <a href="#before-after" class="btn btn-secondary">Ver Antes e Depois</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="portfolio" id="before-after">
+            <div class="container">
+                <h2 class="section-title">Transformações de Sucesso</h2>
+                <p class="section-subtitle">Realize o sonho do cabelo perfeito. Veja alguns de nossos resultados reais direto do nosso Instagram.</p>
+                
+                <div class="portfolio-grid">
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="assets/transformations/liso_intenso.png" alt="Liso Intenso Antes e Depois - Studio Inova">
+                            <div class="social-proof-overlay">
+                                <span class="proof-tag">💬 Post em Destaque</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Liso Intenso & Brilho</h3>
+                            <p>Cabelo alinhado com efeito espelhado e saúde preservada.</p>
+                            <p class="portfolio-comment">"🔥❤️" — <strong>@ewerlany_patricia</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="assets/transformations/makeup_social.png" alt="Maquiagem e Escova - Studio Inova">
+                            <div class="social-proof-overlay">
+                                <span class="proof-tag">💬 Feedback Real</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Produção Social Especial</h3>
+                            <p>Maquiagem e escova modelada para realçar sua beleza em eventos.</p>
+                            <p class="portfolio-comment">"🔥❤️" — <strong>@ewerlany_patricia</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">
+                            <img src="assets/transformations/selante_brilho.png" alt="Selante de Respeito - Studio Inova">
+                            <div class="social-proof-overlay">
+                                <span class="proof-tag">💬 Viral no Instagram</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Selante de Respeito</h3>
+                            <p>Efeito feitiço: redução de volume e brilho radiante.</p>
+                            <p class="portfolio-comment">"❤️🔥" — <strong>@ewerlany_patricia</strong></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="https://www.instagram.com/studio_inova_/" target="_blank" class="btn btn-secondary">Explorar mais no Instagram</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials" id="testimonials">
+            <div class="container">
+                <h2 class="section-title">O que dizem nossas clientes</h2>
+                <div class="testimonials-grid testimonial-best-two">
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="comment">"Ótimas profissionais, produtos de qualidade, atendimento excelente... super indico!"</p>
+                        <span class="client-name">Rose Leite</span>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="comment">"Fiz pé, mão e sobrancelha. Todos os serviços impecáveis. As meninas são super atenciosas e caprichosas."</p>
+                        <span class="client-name">Fernanda Lima</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="location" id="contact">
+            <div class="container">
+                <div class="location-grid">
+                    <div class="location-info">
+                        <h2 class="section-title left">Venha nos visitar</h2>
+                        <div class="badge-empreendedoras">
+                            <span class="heart-icon">💜</span> Empresa de Empreendedoras
+                        </div>
+                        <p class="address">
+                            <strong>Endereço:</strong><br>
+                            R. Cônego Antônio Dias Pequeno, 115<br>
+                            Jardim Tiete, São Paulo - SP, 03945-050
+                        </p>
+                        <p class="hours">
+                            <strong>Horário de Funcionamento:</strong><br>
+                            Terça a Sábado: 09h30 às 19h00
+                        </p>
+                        <p class="contact-details">
+                            <strong>WhatsApp:</strong> (11) 98591-4293<br>
+                            <strong>Instagram:</strong> @studio_inova_
+                        </p>
+                        <div class="cta-group left">
+                            <a href="https://wa.me/5511985914293" target="_blank" class="btn btn-primary">Falar no WhatsApp</a>
+                        </div>
+                    </div>
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.2943647509833!2d-46.4905348!3d-23.593773700000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce67c764801e1b%3A0x7fa81ff1bb3a1542!2sR.%20C%C3%B4nego%20Ant%C3%B4nio%20Dias%20Pequeno%2C%20115%20-%20Jardim%20Tiete%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2003945-050!5e0!3m2!1spt-BR!2sbr!4v1773550173129!5m2!1spt-BR!2sbr" 
+                            width="100%" 
+                            height="450" 
+                            style="border:0; border-radius: 20px;" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="logo-studio-inova.jpg" alt="Studio Inova Logo" class="logo-image footer-logo-img">
+                </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#services">Serviços</a>
+                    <a href="#before-after">Antes & Depois</a>
+                    <a href="#contact">Localização</a>
+                </div>
+                <p class="copyright">&copy; 2024 Studio Inova. Todos os direitos reservados. Revelando sua melhor versão.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.classList.toggle('open');
+        });
+
+        // Background Animation Logic
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        const frameCount = 35;
+        const images = [];
+        const animationState = {
+            currentFrame: 0,
+            lastUpdate: 0,
+            fps: 6 // Super slow motion for maximum elegance
+        };
+
+        // Preload images
+        for (let i = 1; i <= frameCount; i++) {
+            const img = new Image();
+            const frameNum = i.toString().padStart(3, '0');
+            img.src = `frames/ezgif-frame-${frameNum}.jpg`;
+            images.push(img);
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            render();
+        }
+
+        function render() {
+            if (images[animationState.currentFrame] && images[animationState.currentFrame].complete) {
+                const img = images[animationState.currentFrame];
+                
+                // Cover behavior for the image
+                const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                const x = (canvas.width / 2) - (img.width / 2) * scale;
+                const y = (canvas.height / 2) - (img.height / 2) * scale;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+            }
+        }
+
+        function animate(time) {
+            const delta = time - animationState.lastUpdate;
+            const interval = 1000 / animationState.fps;
+
+            if (delta > interval) {
+                animationState.currentFrame = (animationState.currentFrame + 1) % frameCount;
+                animationState.lastUpdate = time;
+                render();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

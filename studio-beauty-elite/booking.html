@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Serviço | Studio Beauty Elite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: '#4d081d',
+                        sand: '#d1a681',
+                        'sand-hover': '#b88f6a',
+                    },
+                    fontFamily: {
+                        heading: ['Playfair Display', 'serif'],
+                        body: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #4d081d; color: #FFFFFF; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(209, 166, 129, 0.2); }
+        .service-card-selected { border-color: #d1a681; background-color: rgba(209, 166, 129, 0.1); }
+        .time-slot:hover { background-color: #d1a681; color: #4d081d; border-color: #d1a681; }
+        .time-slot-selected { background-color: #d1a681 !important; color: #4d081d !important; border-color: #d1a681 !important; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 flex flex-col items-center">
+
+    <div class="max-w-xl w-full">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <a href="../index.html" class="inline-block mb-6">
+                <img src="../logo-studio-inova.jpg" alt="Studio Inova Logo" class="h-20 w-auto rounded-xl shadow-lg border border-sand/20 hover:border-sand transition-all">
+            </a>
+            <h1 class="text-4xl font-bold text-sand mb-2">Seu Momento Elite</h1>
+            <p class="text-white/60">Escolha o serviço e o melhor horário para você.</p>
+        </header>
+
+        <!-- Step 1: Services -->
+        <div class="space-y-4 mb-10">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-sand/50">1. Selecione o Serviço</h2>
+            <div id="services-container" class="grid grid-cols-1 gap-3">
+                <!-- Os serviços serão carregados dinamicamente via Supabase -->
+                <p class="text-center text-white/20 italic py-4">Carregando serviços...</p>
+            </div>
+        </div>
+
+        <!-- Step 2: Date & Time -->
+        <div id="date-section" class="space-y-6 opacity-30 pointer-events-none transition-opacity">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-sand/50">2. Escolha Data e Hora</h2>
+            
+            <!-- Calendar Ribbon -->
+            <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                <p class="text-center text-white/20 italic w-full">Carregando datas...</p>
+            </div>
+
+            <!-- Time Slots -->
+            <div id="time-slots-container" class="grid grid-cols-3 gap-3">
+                <!-- Horários serão validados em tempo real -->
+            </div>
+        </div>
+
+        <!-- Confirm Button -->
+        <div id="confirm-section" class="mt-12 opacity-0 pointer-events-none transition-all transform translate-y-4">
+            <button onclick="confirmBooking()" class="w-full bg-sand text-burgundy py-4 rounded-2xl font-bold text-lg shadow-lg shadow-sand/20 hover:bg-sand-hover hover:shadow-xl active:scale-95 transition-all">
+                Confirmar Agendamento
+            </button>
+            <p class="text-center text-white/40 text-xs mt-4">Ao confirmar, você concorda com nossa política de cancelamento.</p>
+        </div>
+    </div>
+
+    <!-- Supabase Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://zdfbxruhkugiwlmzlclw.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_GOwLD5Q0tpUZvT_prV6xFg_q1zLQFg-';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let selectedService = null;
+        let selectedTimeSlot = null;
+        let selectedDate = new Date().toLocaleDateString('en-CA'); // Padrão: Hoje (Local)
+
+        // 1. Carregar Serviços do Supabase
+        async function loadServices() {
+            const { data: servicos, error } = await supabaseClient
+                .from('servicos')
+                .select('*')
+                .order('nome');
+
+            const container = document.getElementById('services-container');
+            container.innerHTML = '';
+
+            if (error) {
+                console.error('Erro ao carregar serviços:', error);
+                container.innerHTML = '<p class="text-center text-red-400 py-4">Erro ao carregar serviços.</p>';
+                return;
+            }
+
+            servicos.forEach(s => {
+                const card = `
+                    <button onclick="selectService(this, '${s.id}', '${s.nome}', ${s.duracao})" class="service-card glass-card flex items-center justify-between p-4 rounded-2xl transition-all hover:border-sand/50 shadow-sm text-left w-full">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-sand/10 rounded-xl flex items-center justify-center text-sand text-xl">✨</div>
+                            <div>
+                                <h3 class="font-bold text-white">${s.nome}</h3>
+                                <p class="text-xs text-white/50">Duração: ${s.duracao} min</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-sand text-lg">R$ ${s.preco.toFixed(2)}</span>
+                    </button>
+                `;
+                container.innerHTML += card;
+            });
+            
+            // Inicializar Datas
+            renderDates();
+        }
+
+        // Renderizar Próximos 7 Dias
+        function renderDates() {
+            const container = document.querySelector('#date-section .flex');
+            container.innerHTML = '';
+            
+            const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            const today = new Date();
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(today.getDate() + i);
+                const dayName = days[date.getDay()];
+                const dayNum = date.getDate();
+                const dateISO = date.toLocaleDateString('en-CA');
+                
+                const isSelected = selectedDate === dateISO;
+                const activeClasses = isSelected 
+                    ? 'bg-sand border-sand shadow-lg transform scale-105' 
+                    : 'glass-card border-sand/20 hover:border-sand/50';
+                const textClasses = isSelected ? 'text-burgundy' : 'text-white/40';
+                const numClasses = isSelected ? 'text-burgundy' : 'text-white';
+
+                container.innerHTML += `
+                    <div onclick="selectDate('${dateISO}')" class="date-item flex-shrink-0 w-20 p-3 rounded-2xl text-center cursor-pointer transition-all border ${activeClasses}">
+                        <p class="text-xs font-bold uppercase ${textClasses}">${dayName}</p>
+                        <p class="text-xl font-bold ${numClasses}">${dayNum}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            renderDates();
+            checkAvailability();
+        }
+
+        // 2. Selecionar Serviço e Abrir Datas
+        function selectService(el, id, name, duration) {
+            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('service-card-selected', 'border-sand', 'ring-2', 'ring-sand/20'));
+            el.classList.add('service-card-selected', 'border-sand', 'ring-2', 'ring-sand/20');
+            
+            selectedService = { id, name, duration };
+            document.getElementById('date-section').classList.remove('opacity-30', 'pointer-events-none');
+            checkAvailability(); // Atualiza horários livres
+        }
+
+        // 3. Verificar Disponibilidade de Horários
+        async function checkAvailability() {
+            if (!selectedService) return;
+
+            const container = document.getElementById('time-slots-container');
+            container.innerHTML = '<p class="col-span-3 text-center text-white/20 py-4">Verificando horários...</p>';
+
+            const slots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+
+            // Buscar agendamentos existentes
+            const { data: agendamentosHoje, error } = await supabaseClient
+                .from('agendamentos')
+                .select('inicio_em, fim_em')
+                .gte('inicio_em', `${selectedDate}T00:00:00Z`)
+                .lt('inicio_em', `${selectedDate}T23:59:59Z`)
+                .eq('status', 'agendado');
+
+            container.innerHTML = '';
+
+            slots.forEach(time => {
+                const startTime = new Date(`${selectedDate}T${time}:00`); // Local time construction
+                const endTime = new Date(startTime.getTime() + selectedService.duration * 60000);
+
+                // Verificar conflitos
+                const isOccupied = agendamentosHoje?.some(a => {
+                    const aStart = new Date(a.inicio_em);
+                    const aEnd = new Date(a.fim_em);
+                    return (startTime < aEnd && endTime > aStart);
+                });
+
+                // Não permitir horários passados se for hoje
+                const now = new Date();
+                const isPast = startTime < now;
+
+                const isAvailable = !isOccupied && !isPast;
+                
+                const btnClass = !isAvailable 
+                    ? "bg-white/5 text-white/20 cursor-not-allowed border-white/10" 
+                    : "time-slot glass-card text-white border-sand/20 hover:border-sand";
+                
+                const disabled = !isAvailable ? "disabled" : "";
+
+                container.innerHTML += `
+                    <button onclick="selectTime(this)" ${disabled} class="p-3 border rounded-xl text-sm font-semibold transition-all ${btnClass}">${time}</button>
+                `;
+            });
+        }
+
+        function selectTime(el) {
+            document.querySelectorAll('button').forEach(t => t.classList.remove('time-slot-selected'));
+            el.classList.add('time-slot-selected');
+            
+            selectedTimeSlot = el.innerText;
+            document.getElementById('confirm-section').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        }
+
+        // 4. Confirmar Agendamento Final
+        async function confirmBooking() {
+            if (!selectedService || !selectedTimeSlot) return;
+
+            const btn = document.querySelector('#confirm-section button');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = "Agendando...";
+
+            try {
+                // Buscar um cliente genérico para o teste (como no original)
+                const { data: cliente, error: clientErr } = await supabaseClient.from('clientes').select('id').limit(1).single();
+                if (clientErr) throw new Error("Erro ao identificar cliente: " + clientErr.message);
+                if (!cliente) throw new Error("Nenhum cliente encontrado no sistema.");
+
+                // Construção da data local
+                const startTime = new Date(`${selectedDate}T${selectedTimeSlot}:00`);
+                const endTime = new Date(startTime.getTime() + selectedService.duration * 60000);
+
+                const { error } = await supabaseClient.from('agendamentos').insert({
+                    cliente_id: cliente.id,
+                    servico_id: selectedService.id,
+                    inicio_em: startTime.toISOString(), // Salva em UTC para o banco
+                    fim_em: endTime.toISOString(),
+                    status: 'agendado'
+                });
+
+                if (error) throw error;
+
+                alert("✨ Agendamento realizado com sucesso!");
+                window.location.href = 'dashboard.html';
+
+            } catch (err) {
+                console.error(err);
+                alert("Erro ao agendar: " + err.message);
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', loadServices);
+    </script>
+</body>
+</html>
