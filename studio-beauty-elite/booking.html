@@ -48,32 +48,56 @@
         <div class="space-y-4 mb-10">
             <h2 class="text-sm font-bold uppercase tracking-widest text-sand/50">1. Selecione o Serviço</h2>
             <div id="services-container" class="grid grid-cols-1 gap-3">
-                <!-- Os serviços serão carregados dinamicamente via Supabase -->
                 <p class="text-center text-white/20 italic py-4">Carregando serviços...</p>
             </div>
         </div>
 
-        <!-- Step 2: Date & Time -->
-        <div id="date-section" class="space-y-6 opacity-30 pointer-events-none transition-opacity">
-            <h2 class="text-sm font-bold uppercase tracking-widest text-sand/50">2. Escolha Data e Hora</h2>
+        <!-- Step 2: Professional -->
+        <div id="professional-section" class="space-y-4 mb-10 opacity-30 pointer-events-none transition-opacity">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-sand/50">2. Escolha o Profissional</h2>
+            <div id="professionals-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <p class="text-center text-white/20 italic py-4">Selecione um serviço primeiro...</p>
+            </div>
+        </div>
+
+        <!-- Step 3: Date & Time -->
+        <div id="date-section" class="space-y-6 mb-10 opacity-30 pointer-events-none transition-opacity">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-sand/50">3. Escolha Data e Hora</h2>
             
             <!-- Calendar Ribbon -->
-            <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+            <div id="dates-container" class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
                 <p class="text-center text-white/20 italic w-full">Carregando datas...</p>
             </div>
 
             <!-- Time Slots -->
-            <div id="time-slots-container" class="grid grid-cols-3 gap-3">
+            <div id="time-slots-container" class="grid grid-cols-4 gap-3">
                 <!-- Horários serão validados em tempo real -->
+            </div>
+        </div>
+
+        <!-- Step 4: Simple Registration -->
+        <div id="registration-section" class="space-y-6 mb-10 opacity-30 pointer-events-none transition-opacity">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-sand/50">4. Seus Dados</h2>
+            <div class="glass-card p-6 rounded-2xl space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-sand/50 uppercase mb-2">Nome Completo</label>
+                    <input type="text" id="client-name" placeholder="Como podemos te chamar?" 
+                        class="w-full bg-white/5 border border-sand/20 rounded-xl p-3 text-white placeholder:text-white/20 focus:border-sand/50 focus:outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-sand/50 uppercase mb-2">WhatsApp / Telefone</label>
+                    <input type="tel" id="client-phone" placeholder="(00) 00000-0000" 
+                        class="w-full bg-white/5 border border-sand/20 rounded-xl p-3 text-white placeholder:text-white/20 focus:border-sand/50 focus:outline-none transition-all">
+                </div>
             </div>
         </div>
 
         <!-- Confirm Button -->
         <div id="confirm-section" class="mt-12 opacity-0 pointer-events-none transition-all transform translate-y-4">
-            <button onclick="confirmBooking()" class="w-full bg-sand text-burgundy py-4 rounded-2xl font-bold text-lg shadow-lg shadow-sand/20 hover:bg-sand-hover hover:shadow-xl active:scale-95 transition-all">
-                Confirmar Agendamento
+            <button id="confirm-btn" onclick="confirmBooking()" class="w-full bg-sand text-burgundy py-4 rounded-2xl font-bold text-lg shadow-lg shadow-sand/20 hover:bg-sand-hover hover:shadow-xl active:scale-95 transition-all">
+                Finalizar Agendamento
             </button>
-            <p class="text-center text-white/40 text-xs mt-4">Ao confirmar, você concorda com nossa política de cancelamento.</p>
+            <p class="text-center text-white/40 text-xs mt-4 italic">Confirmando, entraremos em contato via WhatsApp.</p>
         </div>
     </div>
 
@@ -85,10 +109,11 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let selectedService = null;
+        let selectedProfessional = null;
         let selectedTimeSlot = null;
-        let selectedDate = new Date().toLocaleDateString('en-CA'); // Padrão: Hoje (Local)
+        let selectedDate = new Date().toLocaleDateString('en-CA');
 
-        // 1. Carregar Serviços do Supabase
+        // 1. Carregar Serviços
         async function loadServices() {
             const { data: servicos, error } = await supabaseClient
                 .from('servicos')
@@ -99,36 +124,76 @@
             container.innerHTML = '';
 
             if (error) {
-                console.error('Erro ao carregar serviços:', error);
                 container.innerHTML = '<p class="text-center text-red-400 py-4">Erro ao carregar serviços.</p>';
                 return;
             }
 
             servicos.forEach(s => {
                 const card = `
-                    <button onclick="selectService(this, '${s.id}', '${s.nome}', ${s.duracao})" class="service-card glass-card flex items-center justify-between p-4 rounded-2xl transition-all hover:border-sand/50 shadow-sm text-left w-full">
+                    <button onclick="selectService(this, '${s.id}', '${s.nome}', ${s.duracao}, ${s.preco})" class="service-card glass-card flex items-center justify-between p-4 rounded-2xl transition-all hover:border-sand/50 shadow-sm text-left w-full group">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-sand/10 rounded-xl flex items-center justify-center text-sand text-xl">✨</div>
+                            <div class="w-10 h-10 bg-sand/10 rounded-xl flex items-center justify-center text-sand text-lg group-hover:scale-110 transition-transform">✨</div>
                             <div>
-                                <h3 class="font-bold text-white">${s.nome}</h3>
-                                <p class="text-xs text-white/50">Duração: ${s.duracao} min</p>
+                                <h3 class="font-bold text-white text-sm">${s.nome}</h3>
+                                <p class="text-[10px] text-white/40 uppercase tracking-wider">${s.duracao} min de cuidado</p>
                             </div>
                         </div>
-                        <span class="font-bold text-sand text-lg">R$ ${s.preco.toFixed(2)}</span>
+                        <span class="font-bold text-sand">R$ ${s.preco.toFixed(2)}</span>
                     </button>
                 `;
                 container.innerHTML += card;
             });
-            
-            // Inicializar Datas
-            renderDates();
         }
 
-        // Renderizar Próximos 7 Dias
-        function renderDates() {
-            const container = document.querySelector('#date-section .flex');
+        // 2. Carregar Profissionais
+        async function loadProfessionals() {
+            const { data: profissionais, error } = await supabaseClient
+                .from('profissionais')
+                .select('*')
+                .order('nome');
+
+            const container = document.getElementById('professionals-container');
             container.innerHTML = '';
+
+            if (error) return;
+
+            profissionais.forEach(p => {
+                const card = `
+                    <button onclick="selectProfessional(this, '${p.id}', '${p.nome}')" class="professional-card glass-card flex items-center gap-3 p-3 rounded-xl transition-all hover:border-sand/50 text-left w-full">
+                        <div class="w-10 h-10 bg-sand/20 rounded-full flex items-center justify-center text-sand font-bold">${p.nome.charAt(0)}</div>
+                        <div>
+                            <h3 class="font-bold text-white text-sm">${p.nome}</h3>
+                            <p class="text-[10px] text-white/40 uppercase">Especialista</p>
+                        </div>
+                    </button>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Seleções
+        function selectService(el, id, name, duration, price) {
+            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('service-card-selected', 'border-sand', 'ring-1', 'ring-sand/30'));
+            el.classList.add('service-card-selected', 'border-sand', 'ring-1', 'ring-sand/30');
             
+            selectedService = { id, name, duration, price };
+            document.getElementById('professional-section').classList.remove('opacity-30', 'pointer-events-none');
+            loadProfessionals();
+        }
+
+        function selectProfessional(el, id, name) {
+            document.querySelectorAll('.professional-card').forEach(c => c.classList.remove('border-sand', 'ring-1', 'ring-sand/30', 'bg-sand/10'));
+            el.classList.add('border-sand', 'ring-1', 'ring-sand/30', 'bg-sand/10');
+            
+            selectedProfessional = { id, name };
+            document.getElementById('date-section').classList.remove('opacity-30', 'pointer-events-none');
+            renderDates();
+            checkAvailability();
+        }
+
+        function renderDates() {
+            const container = document.getElementById('dates-container');
+            container.innerHTML = '';
             const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
             const today = new Date();
 
@@ -136,20 +201,17 @@
                 const date = new Date();
                 date.setDate(today.getDate() + i);
                 const dayName = days[date.getDay()];
-                const dayNum = date.getDate();
                 const dateISO = date.toLocaleDateString('en-CA');
                 
                 const isSelected = selectedDate === dateISO;
-                const activeClasses = isSelected 
-                    ? 'bg-sand border-sand shadow-lg transform scale-105' 
-                    : 'glass-card border-sand/20 hover:border-sand/50';
+                const activeClasses = isSelected ? 'bg-sand border-sand' : 'glass-card border-sand/20';
                 const textClasses = isSelected ? 'text-burgundy' : 'text-white/40';
                 const numClasses = isSelected ? 'text-burgundy' : 'text-white';
 
                 container.innerHTML += `
-                    <div onclick="selectDate('${dateISO}')" class="date-item flex-shrink-0 w-20 p-3 rounded-2xl text-center cursor-pointer transition-all border ${activeClasses}">
-                        <p class="text-xs font-bold uppercase ${textClasses}">${dayName}</p>
-                        <p class="text-xl font-bold ${numClasses}">${dayNum}</p>
+                    <div onclick="selectDate('${dateISO}')" class="date-item flex-shrink-0 w-16 p-2 rounded-xl text-center cursor-pointer transition-all border ${activeClasses}">
+                        <p class="text-[10px] font-bold uppercase ${textClasses}">${dayName}</p>
+                        <p class="text-lg font-bold ${numClasses}">${date.getDate()}</p>
                     </div>
                 `;
             }
@@ -161,29 +223,19 @@
             checkAvailability();
         }
 
-        // 2. Selecionar Serviço e Abrir Datas
-        function selectService(el, id, name, duration) {
-            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('service-card-selected', 'border-sand', 'ring-2', 'ring-sand/20'));
-            el.classList.add('service-card-selected', 'border-sand', 'ring-2', 'ring-sand/20');
-            
-            selectedService = { id, name, duration };
-            document.getElementById('date-section').classList.remove('opacity-30', 'pointer-events-none');
-            checkAvailability(); // Atualiza horários livres
-        }
-
-        // 3. Verificar Disponibilidade de Horários
         async function checkAvailability() {
-            if (!selectedService) return;
+            if (!selectedService || !selectedProfessional) return;
 
             const container = document.getElementById('time-slots-container');
-            container.innerHTML = '<p class="col-span-3 text-center text-white/20 py-4">Verificando horários...</p>';
+            container.innerHTML = '<p class="col-span-4 text-center text-white/20 py-4 text-xs">Verificando...</p>';
 
             const slots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
 
-            // Buscar agendamentos existentes
-            const { data: agendamentosHoje, error } = await supabaseClient
+            // Buscar agendamentos do profissional no dia
+            const { data: ocupados } = await supabaseClient
                 .from('agendamentos')
                 .select('inicio_em, fim_em')
+                .eq('profissional_id', selectedProfessional.id)
                 .gte('inicio_em', `${selectedDate}T00:00:00Z`)
                 .lt('inicio_em', `${selectedDate}T23:59:59Z`)
                 .eq('status', 'agendado');
@@ -191,84 +243,100 @@
             container.innerHTML = '';
 
             slots.forEach(time => {
-                const startTime = new Date(`${selectedDate}T${time}:00`); // Local time construction
+                const startTime = new Date(`${selectedDate}T${time}:00`);
                 const endTime = new Date(startTime.getTime() + selectedService.duration * 60000);
-
-                // Verificar conflitos
-                const isOccupied = agendamentosHoje?.some(a => {
+                
+                const isOccupied = ocupados?.some(a => {
                     const aStart = new Date(a.inicio_em);
                     const aEnd = new Date(a.fim_em);
                     return (startTime < aEnd && endTime > aStart);
                 });
 
-                // Não permitir horários passados se for hoje
-                const now = new Date();
-                const isPast = startTime < now;
-
-                const isAvailable = !isOccupied && !isPast;
-                
-                const btnClass = !isAvailable 
-                    ? "bg-white/5 text-white/20 cursor-not-allowed border-white/10" 
-                    : "time-slot glass-card text-white border-sand/20 hover:border-sand";
-                
-                const disabled = !isAvailable ? "disabled" : "";
+                const isAvailable = !isOccupied && (startTime > new Date());
+                const btnClass = !isAvailable ? "opacity-20 cursor-not-allowed" : "time-slot glass-card border-sand/20 hover:border-sand";
 
                 container.innerHTML += `
-                    <button onclick="selectTime(this)" ${disabled} class="p-3 border rounded-xl text-sm font-semibold transition-all ${btnClass}">${time}</button>
+                    <button onclick="selectTime(this)" ${!isAvailable ? 'disabled' : ''} class="p-2 border rounded-lg text-xs font-bold transition-all ${btnClass}">${time}</button>
                 `;
             });
         }
 
         function selectTime(el) {
-            document.querySelectorAll('button').forEach(t => t.classList.remove('time-slot-selected'));
-            el.classList.add('time-slot-selected');
+            document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('time-slot-selected', 'bg-sand', 'text-burgundy'));
+            el.classList.add('time-slot-selected', 'bg-sand', 'text-burgundy');
             
             selectedTimeSlot = el.innerText;
+            document.getElementById('registration-section').classList.remove('opacity-30', 'pointer-events-none');
             document.getElementById('confirm-section').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
 
         // 4. Confirmar Agendamento Final
         async function confirmBooking() {
-            if (!selectedService || !selectedTimeSlot) return;
+            const name = document.getElementById('client-name').value.trim();
+            const phone = document.getElementById('client-phone').value.trim();
 
-            const btn = document.querySelector('#confirm-section button');
-            const originalText = btn.innerText;
+            if (!name || !phone) {
+                alert("Por favor, preencha seu nome e telefone.");
+                return;
+            }
+
+            const btn = document.getElementById('confirm-btn');
             btn.disabled = true;
             btn.innerText = "Agendando...";
 
             try {
-                // Buscar um cliente genérico para o teste (como no original)
-                const { data: cliente, error: clientErr } = await supabaseClient.from('clientes').select('id').limit(1).single();
-                if (clientErr) throw new Error("Erro ao identificar cliente: " + clientErr.message);
-                if (!cliente) throw new Error("Nenhum cliente encontrado no sistema.");
+                // 1. Upsert Cliente (pelo telefone para evitar duplicidade simples)
+                const { data: clienteExistente } = await supabaseClient
+                    .from('clientes')
+                    .select('id')
+                    .eq('telefone', phone)
+                    .maybeSingle();
 
-                // Construção da data local
+                let clienteId;
+                if (clienteExistente) {
+                    clienteId = clienteExistente.id;
+                    // Atualiza o nome se for diferente
+                    await supabaseClient.from('clientes').update({ nome: name }).eq('id', clienteId);
+                } else {
+                    const { data: novoCliente, error: errC } = await supabaseClient
+                        .from('clientes')
+                        .insert({ nome: name, telefone: phone })
+                        .select('id')
+                        .single();
+                    if (errC) throw errC;
+                    clienteId = novoCliente.id;
+                }
+
+                // 2. Inserir Agendamento
                 const startTime = new Date(`${selectedDate}T${selectedTimeSlot}:00`);
                 const endTime = new Date(startTime.getTime() + selectedService.duration * 60000);
 
-                const { error } = await supabaseClient.from('agendamentos').insert({
-                    cliente_id: cliente.id,
+                const { error: errA } = await supabaseClient.from('agendamentos').insert({
+                    cliente_id: clienteId,
                     servico_id: selectedService.id,
-                    inicio_em: startTime.toISOString(), // Salva em UTC para o banco
+                    profissional_id: selectedProfessional.id,
+                    inicio_em: startTime.toISOString(),
                     fim_em: endTime.toISOString(),
                     status: 'agendado'
                 });
 
-                if (error) throw error;
+                if (errA) throw errA;
 
-                alert("✨ Agendamento realizado com sucesso!");
-                window.location.href = 'dashboard.html';
+                alert("✨ Tudo pronto, " + name + "! Seu horário está reservado.");
+                window.location.href = '../index.html'; // Volta para a home ou dashboard
 
             } catch (err) {
                 console.error(err);
-                alert("Erro ao agendar: " + err.message);
+                alert("Erro ao agendar. Tente novamente.");
                 btn.disabled = false;
-                btn.innerText = originalText;
+                btn.innerText = "Finalizar Agendamento";
             }
         }
 
-        // Inicializar
         document.addEventListener('DOMContentLoaded', loadServices);
     </script>
+</body>
+</html>
+
 </body>
 </html>

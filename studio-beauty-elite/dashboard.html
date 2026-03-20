@@ -200,6 +200,7 @@
                     <tr>
                         <th class="px-6 py-4">Cliente</th>
                         <th class="px-6 py-4">Serviço</th>
+                        <th class="px-6 py-4">Profissional</th>
                         <th class="px-6 py-4">Data/Hora</th>
                         <th class="px-6 py-4 text-right">Valor</th>
                         <th class="px-6 py-4 text-right">Status</th>
@@ -277,7 +278,7 @@
 
                 const { data: agendamentos, error } = await supabaseClient
                     .from('agendamentos')
-                    .select('*, clientes(nome), servicos(nome, preco)')
+                    .select('*, clientes(nome), servicos(nome, preco), profissionais(nome)')
                     .gte('inicio_em', start.toISOString())
                     .order('inicio_em', { ascending: false });
 
@@ -322,6 +323,9 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-white/50">${agendamento.servicos?.nome || 'Serviço não identificado'}</td>
+                            <td class="px-6 py-4 text-white/50">
+                                <span class="bg-sand/5 text-sand px-2 py-1 rounded text-[10px] font-bold">${agendamento.profissionais?.nome || 'Qualquer'}</span>
+                            </td>
                             <td class="px-6 py-4 text-white/50 italic">${dataDisplay}</td>
                             <td class="px-6 py-4 font-semibold text-sand text-right">R$ ${agendamento.servicos?.preco?.toFixed(2) || '0,00'}</td>
                             <td class="px-6 py-4 text-right">
