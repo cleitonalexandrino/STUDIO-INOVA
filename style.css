@@ -67,11 +67,11 @@ body {
 }
 
 .logo-image {
-    height: 85px; /* Increased by ~30% to make it much more prominent */
+    height: 110px; /* Increased by another 30% */
     width: auto;
     object-fit: contain;
     transition: var(--transition);
-    filter: drop-shadow(0 0 10px rgba(209, 166, 129, 0.4)); /* Enhanced glow slightly to match larger size */
+    filter: drop-shadow(0 0 10px rgba(209, 166, 129, 0.4));
 }
 
 .logo-image:hover {
@@ -512,7 +512,7 @@ body {
 }
 
 .footer-logo-img {
-    height: 78px; /* Enhanced visibility in footer (increased by 30%) */
+    height: 100px; /* Increased by another 30% */
     margin-bottom: 25px;
     filter: drop-shadow(0 0 12px rgba(209, 166, 129, 0.5));
 }
